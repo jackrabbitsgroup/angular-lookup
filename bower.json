@@ -1,0 +1,32 @@
+{
+	"name": "angular-lookup",
+	"version": "1.0.0",
+	"authors": [
+		"Luke Madera <luke.madera@gmail.com>"
+	],
+	"description": "AngularJS look (more robust filter, with paging) directive",
+	"keywords": [
+		"angular",
+		"AngularJS",
+		"lookup",
+		"angular-lookup",
+		"filter",
+		"directive"
+	],
+	"license": "MIT",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"angular":"~1.2.0",
+		"angular-animate":"~1.2.0",
+		"angular-sanitize":"~1.2.0",
+		"angular-touch":"~1.2.0"
+	},
+	"devDependencies": {
+	}
+}
