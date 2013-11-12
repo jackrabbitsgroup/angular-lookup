@@ -205,7 +205,7 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 			opts: '='
 		},
 
-		compile: function(element, attrs) {
+		template: function(element, attrs) {
 			var defaults ={'pageSize':10, 'placeholder':'search', 'scrollLoad':'0', 'loadMorePageSize':20, 'loadMoreItemsKey':'extra', 'filterFieldsDotNotation':true, 'pageScroll':0, minSearchLength: 2, minSearchShowAll:1, classInput:'', classInputCont:''};
 			for(var xx in defaults) {
 				if(attrs[xx] ===undefined) {
@@ -250,10 +250,7 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				"</div>"+
 			"</div>";
 				
-			element.replaceWith(html);
-
-			return function(scope, element, attrs) {
-			};
+			return html;
 		},
 		
 		controller: function($scope, $element, $attrs) {
