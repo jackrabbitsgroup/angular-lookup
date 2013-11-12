@@ -12,11 +12,9 @@ http://jackrabbitsgroup.github.io/angular-lookup/
 
 ## Dependencies
 - required:
-	- angular (tested with 2.0.rc3)
-	- lesshat
+	- angular (tested with 1.2.0)
+	- lesshat (tested with 2.0.4)
 	- jquery (tested with 1.8.3) - NOTE: we're aiming to remove this dependency to keep it more lightweight
-- optional
-	- [none]
 
 See `bower.json` and `index.html` in the `gh-pages` branch for a full list / more details
 
@@ -25,7 +23,7 @@ See `bower.json` and `index.html` in the `gh-pages` branch for a full list / mor
 	1. Bower
 		1. add `"angular-lookup": "latest"` to your `bower.json` file then run `bower install` OR run `bower install angular-lookup`
 2. include the files in your app
-	1. `lookup.js`
+	1. `lookup.min.js`
 	2. `lookup.less`
 3. include the module in angular (i.e. in `app.js`) - `jackrabbitsgroup.angular-lookup`
 
