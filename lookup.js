@@ -1,7 +1,4 @@
 /**
-@todo
-- remove jQuery dependency
-
 Uses one associative array (raw data) to build a concatenated scalar (final/display) array of items to search / filter.
 	Adds upon ng-filter directive with the following features:
 	- handles paging / loading more when scroll to bottom
@@ -71,6 +68,7 @@ Uses one associative array (raw data) to build a concatenated scalar (final/disp
 
 
 @usage
+//EXAMPLE 1:
 partial / html:
 	<div jrg-lookup items-raw='usersRaw' items-filtered='users' filter-fields='filterFields' load-more='loadMore' opts='opts'>
 		<!-- custom display code to ng-repeat and display the results (items-filtered) goes below -->
@@ -118,6 +116,44 @@ controller / js:
 	//	@param {String} searchText
 	//	@param {Number} cursor Where to load from
 	//	@param {Number} loadMorePageSize How many to return
+	$scope.loadMore =function(params, callback) {
+		var results =itemsMore.slice(params.cursor, (params.cursor+params.loadMorePageSize));
+		callback(results, {});
+	};
+
+	
+	
+//EXAMPLE 2: page scroll
+partial / html:
+	<div jrg-lookup items-raw='usersRaw' items-filtered='users' filter-fields='filterFields' load-more='loadMore' opts='opts' scroll-load='1' page-scroll='1'>
+		<!-- custom display code to ng-repeat and display the results (items-filtered) goes below -->
+		<div class='friends-user' ng-repeat='user in users'>
+			{{user.name}}
+		</div>
+		<!-- end: custom display code -->
+	</div>
+
+controller / js:
+	$scope.opts ={};
+	$scope.filterFields =['name'];
+	$scope.users =[];
+	$scope.usersRaw ={
+	};
+	
+	//handle load more (callbacks)
+	var totItems =1000;
+	var itemsMore =[];
+	for(var ii=0; ii<totItems; ii++) {
+		itemsMore[ii] ={'_id':(ii+1), 'name':(ii+1)+'. Item #'+(ii+1)};
+	}
+	
+	// @param {Object} params
+		// @param {Number} cursor Where to load from
+		// @param {Number} loadMorePageSize How many to return
+		// @param {String} searchText The string of text that was searched
+	// @param {Function} callback Function to pass the results back to - takes the following arguments:
+		// @param {Array} results The new results to add in
+		// @param {Object} [params]
 	$scope.loadMore =function(params, callback) {
 		var results =itemsMore.slice(params.cursor, (params.cursor+params.loadMorePageSize));
 		callback(results, {});
@@ -343,10 +379,22 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						timeoutInfo.scrolling.trig =$timeout(function() {
 							//console.log('jrgLookup timeout scrolling loading');
 							var buffer =25;
-							var scrollPos =$(window).scrollTop();
-							var scrollHeight =$(document).height();
-							var viewportHeight =$(window).height();
-							//console.log("pos: "+scrollPos+" height: "+scrollHeight+" height: "+viewportHeight);
+							var scrollPos, scrollHeight, viewportHeight;
+							if(0) {		//old - jquery
+							scrollPos =$(window).scrollTop();
+							scrollHeight =$(document).height();
+							viewportHeight =$(window).height();
+							}
+							else {
+							// http://stackoverflow.com/questions/3464876/javascript-get-window-x-y-position-for-scroll
+							scrollPos =(window.pageYOffset || document.documentElement.scrollTop);
+							// http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+							scrollHeight =Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
+							// http://www.javascripter.net/faq/browserw.htm
+							viewportHeight =window.innerHeight;
+							}
+							
+							console.log("scrollPos: "+scrollPos+" scrollHeight: "+scrollHeight+" viewportHeight: "+viewportHeight);
 							if(scrollPos >=(scrollHeight-viewportHeight-buffer)) {
 								$scope.loadMoreDir({'noDelay':true, 'next':true});
 							}
@@ -724,9 +772,19 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						var scrollHeight;
 						if($attrs.pageScroll) {
 							//var scrollPos =$(window).scrollTop();
+							var viewportHeight;
+							if(0) {		//old - jquery
 							scrollHeight =$(document).height();
-							var viewportHeight =$(window).height();
-							//console.log("pos: "+scrollPos+" height: "+scrollHeight+" height: "+height1);
+							viewportHeight =$(window).height();
+							}
+							else {
+							// http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+							scrollHeight =Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
+							// http://www.javascripter.net/faq/browserw.htm
+							viewportHeight =window.innerHeight;
+							}
+							
+							console.log(" scrollHeight: "+scrollHeight+" viewportHeight: "+viewportHeight);
 							if(scrollHeight >viewportHeight) {
 								$scope.hasScrollbar =true;
 							}

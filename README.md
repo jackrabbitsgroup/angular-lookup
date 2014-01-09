@@ -13,7 +13,6 @@ http://jackrabbitsgroup.github.io/angular-lookup/
 ## Dependencies
 - required:
 	- angular >=1.2.0
-	- jquery (tested with 1.8.3) - NOTE: we're aiming to remove this dependency to keep it more lightweight
 - optional:
 	- lesshat >=2.0.4
 
