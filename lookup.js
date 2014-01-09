@@ -379,18 +379,19 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						timeoutInfo.scrolling.trig =$timeout(function() {
 							//console.log('jrgLookup timeout scrolling loading');
 							var buffer =25;
+							var scrollPos, scrollHeight, viewportHeight;
 							if(0) {		//old - jquery
-							var scrollPos =$(window).scrollTop();
-							var scrollHeight =$(document).height();
-							var viewportHeight =$(window).height();
+							scrollPos =$(window).scrollTop();
+							scrollHeight =$(document).height();
+							viewportHeight =$(window).height();
 							}
 							else {
 							// http://stackoverflow.com/questions/3464876/javascript-get-window-x-y-position-for-scroll
-							var scrollPos =(window.pageYOffset || document.documentElement.scrollTop);
+							scrollPos =(window.pageYOffset || document.documentElement.scrollTop);
 							// http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
-							var scrollHeight =Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
+							scrollHeight =Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
 							// http://www.javascripter.net/faq/browserw.htm
-							var viewportHeight =window.innerHeight;
+							viewportHeight =window.innerHeight;
 							}
 							
 							console.log("scrollPos: "+scrollPos+" scrollHeight: "+scrollHeight+" viewportHeight: "+viewportHeight);
@@ -771,16 +772,16 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						var scrollHeight;
 						if($attrs.pageScroll) {
 							//var scrollPos =$(window).scrollTop();
-							
+							var viewportHeight;
 							if(0) {		//old - jquery
 							scrollHeight =$(document).height();
-							var viewportHeight =$(window).height();
+							viewportHeight =$(window).height();
 							}
 							else {
 							// http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
 							scrollHeight =Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
 							// http://www.javascripter.net/faq/browserw.htm
-							var viewportHeight =window.innerHeight;
+							viewportHeight =window.innerHeight;
 							}
 							
 							console.log(" scrollHeight: "+scrollHeight+" viewportHeight: "+viewportHeight);
