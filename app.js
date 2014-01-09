@@ -25,6 +25,9 @@ config(['$routeProvider', '$locationProvider', '$compileProvider', function($rou
 	
 	
 	$routeProvider.when(appPathRoute+'home', {templateUrl: pagesPath+'home/home.html'});
+	
+	$routeProvider.when(appPathRoute+'basic', {templateUrl: pagesPath+'basic/basic.html'});
+	$routeProvider.when(appPathRoute+'page-scroll', {templateUrl: pagesPath+'page-scroll/page-scroll.html'});
 
 	$routeProvider.otherwise({redirectTo: appPathRoute+'home'});
 	
