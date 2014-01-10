@@ -1,4 +1,4 @@
-# AngularJS look (more robust filter, with paging) directive
+# AngularJS lookup (more robust filter, with paging) directive
 
 Expands ng-filter to add paging and backend loading.
 
