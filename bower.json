@@ -4,7 +4,7 @@
 	"authors": [
 		"Luke Madera <luke.madera@gmail.com>"
 	],
-	"description": "AngularJS look (more robust filter, with paging) directive",
+	"description": "AngularJS lookup (more robust filter, with paging) directive",
 	"keywords": [
 		"angular",
 		"AngularJS",
