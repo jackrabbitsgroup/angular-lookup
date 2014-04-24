@@ -1,5 +1,10 @@
 Version numbers correspond to `bower.json` version
 
+# 1.0.5 (2014-04-23)
+## Features
+- add `jrgLookupReInit` event to call to re init directive
+
+
 # 1.0.4 (2014-01-08)
 ## Features
 - remove jQuery dependency

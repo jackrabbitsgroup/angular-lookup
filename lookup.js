@@ -9,19 +9,20 @@ Uses one associative array (raw data) to build a concatenated scalar (final/disp
 	- NOTE: a queue is used to pre-fill the NEXT page's content so more results should always appear fast since the next page's items should already be in javascript by the time "load more" is clicked (i.e. the AJAX / external call is done right AFTER the previous page is loaded rather than right before the new page is loaded)
 	
 @toc
-//0.5. init
-//1. formItems
-//2. $scope.filterItems
-//3. $scope.clickInput
-//3.5. $scope.clearInput
-//4. $scope.changeInput
-//5. $scope.$watch('itemsRaw',..
-//5.1. $scope.$watch('opts.searchText',..
-//5.5. $scope.$on('jrgLookupReformItems',..
-//6. $scope.loadMoreDir
-//7. getMoreItems
-//8. addLoadMoreItems
-//9. checkForScrollBar
+0.5. init
+1. formItems
+2. $scope.filterItems
+3. $scope.clickInput
+3.5. $scope.clearInput
+4. $scope.changeInput
+5. $scope.$watch('itemsRaw',..
+5.1. $scope.$watch('opts.searchText',..
+5.5. $scope.$on('jrgLookupReformItems',..
+5.6. $scope.$on('jrgLookupReInit',..
+6. $scope.loadMoreDir
+7. getMoreItems
+8. addLoadMoreItems
+9. checkForScrollBar
 
 @param {Object} scope (attrs that must be defined on the scope (i.e. in the controller) - they can't just be defined in the partial html). REMEMBER: use snake-case when setting these on the partial!
 	@param {Array} itemsRaw array of arrays {}, one per each "type". Each type must contain an "items" field that's a scalar array of the items for this type
@@ -426,7 +427,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				}
 			}
 			
-			//0.5.
+			/**
+			@toc 0.5.
+			@method init
+			*/
 			function init(params) {
 				formItems({});
 				if($scope.queuedItems.length <$attrs.pageSize && $scope.totFilteredItems <$scope.page*$attrs.pageSize) {		//load more externally if don't have enough
@@ -434,7 +438,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				}
 			}
 			
-			//0.75.
+			/**
+			@toc 0.75.
+			@method resetItems
+			*/
 			function resetItems(params) {
 				$scope.page =1;		//reset
 				checkForScrollBar({});
@@ -449,9 +456,9 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				//$("#"+$attrs.ids.scrollContent).scrollTop(0);
 			}
 			
-			//1.
-			/*
+			/**
 			concats all types in itemsRaw into a final set of items to be selected from / displayed
+			@toc 1.
 			@param params
 				OPTIONAL
 				keys =array [] of which itemsRaw keys to copy over; otherwise all will be copied over
@@ -477,7 +484,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				$scope.filterItems({});		//search / re-filter
 			}
 			
-			//2.
+			/**
+			@toc 2.
+			@method $scope.filterItems
+			*/
 			$scope.filterItems =function(params) {
 				//$scope.itemsFiltered =$filter('filter')($scope.items, {name:$scope.opts.searchText});
 				var curItem =false;
@@ -530,7 +540,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				checkForScrollBar({});
 			};
 			
-			//3.
+			/**
+			@toc 3.
+			@method $scope.clickInput
+			*/
 			$scope.clickInput =function(params) {
 				$scope.filterItems({});
 			};
@@ -544,7 +557,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				$scope.changeInput({});
 			};
 			
-			//4.
+			/**
+			@toc 4.
+			@method $scope.changeInput
+			*/
 			$scope.changeInput =function(params) {
 				resetItems({});
 				//$scope.filterItems({});
@@ -566,7 +582,9 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				}
 			};
 			
-			//5.
+			/**
+			@toc 5.
+			*/
 			/*
 			//doesn't work - have to watch a sub array piece
 			$scope.$watch('itemsRaw', function(newVal, oldVal) {
@@ -598,23 +616,38 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				});
 			}
 			
-			//5.1.
+			/**
+			@toc 5.1.
+			@method $scope.$watch('opts.searchText',..
+			*/
 			$scope.$watch('opts.searchText', function(newVal, oldVal) {
 				if(!angular.equals(oldVal, newVal)) {
 					$scope.changeInput({});
 				}
 			});
 			
-			//5.5. $watch not firing all the time... @todo figure out & fix this.. (also this will reform ALL instances - should pass in an instance id - which means the directive would have to pass an instance back somehow..)
+			/**
+			@toc 5.5. $watch not firing all the time... @todo figure out & fix this.. (also this will reform ALL instances - should pass in an instance id - which means the directive would have to pass an instance back somehow..)
+			@method $scope.$on('jrgLookupReformItems',..
+			*/
 			$scope.$on('jrgLookupReformItems', function(evt, params) {
 				formItems({});
 			});
-
 			
-			//6.
-			/*
+			/**
+			$watch not firing all the time... @todo figure out & fix this.. (also this will reform ALL instances - should pass in an instance id - which means the directive would have to pass an instance back somehow..)
+			@toc 5.6.
+			@method $scope.$on('jrgLookupReInit',..
+			*/
+			$scope.$on('jrgLookupReInit', function(evt, params) {
+				resetItems({});
+				init({});
+			});
+			
+			/**
 			Starts the load more process - checks if need to load more (may already have more items in the existing javascript filtered items array, in which case can just load more internally) and IF need to load more external items, sets a timeout to do so (for performance to avoid rapid firing external calls)
 				This is paired with the getMoreItems function below - which handles actually getting the items AFTER the timeout
+			@toc 6.
 			@param params
 				noDelay =boolean true to skip the timeout before loading more (i.e. if coming from scroll, in which case already have waited)
 			*/
@@ -651,10 +684,11 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				}
 			};
 			
-			//7.
-			/*
+			/**
 			Handles loading items from the queue and calling the external loadMore function to pre-fill the queue for the next page (this is the function that runs AFTER the timeout set in $scope.loadMoreDir function)
 			If have items in queue, they're added to itemsRaw and then formItems is re-called to re-form filtered items & update display
+			@toc 7.
+			@method getMoreItems
 			*/
 			function getMoreItems(params) {
 				if($scope.loadMore !==undefined && $scope.loadMore() !==undefined && typeof($scope.loadMore()) =='function') {		//this is an optional scope attr so don't assume it exists
@@ -692,8 +726,9 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				}
 			}
 			
-			//7.5.
-			/*
+			/**
+			@toc 7.5.
+			@method addItemsFromQueue
 			@param params
 				OPTIONAL
 				numToAdd =int of number of items to pull from queue (if not set, will take a full page's worth or the number left in queue, whichever is greater)
@@ -738,11 +773,11 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				return retArray;
 			}
 			
-			//8.
-			/*
+			/**
 			This is the callback function that is called from the outer (non-directive) controller with the externally loaded items. These items are added to the queue and the cursor is updated accordingly.
 				- Additionally, the noMoreLoadMoreItems trigger is set if the returned results are less than the loadMorePageSize
 				- Also, it immediately will load from queue if the current page isn't full yet (if params.partialLoad & params.numToFillCurPage are set)
+			@toc 8.
 			@param results =array [] of items (will be appended to queue)
 			@param ppCustom =params returned from callback
 			@param params
@@ -765,7 +800,10 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 				$scope.trigs.loading =false;		//reset
 			}
 			
-			//9.
+			/**
+			@toc 9.
+			@method checkForScrollBar
+			*/
 			function checkForScrollBar(params) {
 				if($scope.scrollLoad) {
 					$timeout(function() {		//need timeout to wait for items to load / display so scroll height is correct
