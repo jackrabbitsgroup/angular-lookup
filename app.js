@@ -20,7 +20,7 @@ config(['$routeProvider', '$locationProvider', '$compileProvider', function($rou
 	var staticPath;
 	// staticPath ='/angular-directives/angular-lookup/';		//local
 	staticPath ='/';		//local (nodejs)
-	// staticPath ='/angular-lookup/';		//gh-pages
+	staticPath ='/angular-lookup/';		//gh-pages
 	var appPathRoute =staticPath;
 	var pagesPath =staticPath+'pages/';
 	
