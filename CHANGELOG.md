@@ -1,5 +1,9 @@
 Version numbers correspond to `bower.json` version
 
+# 1.0.7 (2014-10-14)
+- update angular dependencies to be >=1.2.2
+
+
 # 1.0.6 (2014-10-14)
 - add `scroll-buffer` attribute option for when to trigger loading more
 
