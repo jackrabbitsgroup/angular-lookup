@@ -58,6 +58,7 @@ Uses one associative array (raw data) to build a concatenated scalar (final/disp
 	@param {Boolean} [filterFieldsDotNotation =true] true to change all periods to sub array's (i.e. so 'header.title' as a filterField would search in header['title'] for a match)
 	@param {Number} [scrollLoad =0] 1 to do paging via scrolling
 	@param {Number} [pageScroll =0] 1 to do paging via scrolling for entire window as opposed to a specific div (good for mobile / touch screens where only 1 scroll bar works well)
+	@param {Number} [scrollBuffer =25] How much space (in pixels) from top or bottom to start switching the page
 	@param {Number} [pageSize =10] how many results to show at a time (will load more in increments of pageSize as scroll down / click "more")
 	@param {Number} [loadMorePageSize =20] how many results to load (& thus store in queue) at a time - must be at least as large as pageSize (and typically should be at least 2 times as big as page size?? maybe not? just need to ensure never have to AJAX twice to display 1 page)
 	@param {String} [loadMoreItemsKey ='extra'] matches a key in the itemsRaw array - this is where items from backend will be loaded into
@@ -244,14 +245,14 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 
 		replace: true,
 		template: function(element, attrs) {
-			var defaults ={'pageSize':10, 'placeholder':'search', 'scrollLoad':'0', 'loadMorePageSize':20, 'loadMoreItemsKey':'extra', 'filterFieldsDotNotation':true, 'pageScroll':0, minSearchLength: 2, minSearchShowAll:1, classInput:'', classInputCont:''};
+			var defaults ={'pageSize':10, 'placeholder':'search', 'scrollLoad':'0', 'loadMorePageSize':20, 'loadMoreItemsKey':'extra', 'filterFieldsDotNotation':true, 'pageScroll':0, 'scrollBuffer':25, minSearchLength: 2, minSearchShowAll:1, classInput:'', classInputCont:''};
 			for(var xx in defaults) {
 				if(attrs[xx] ===undefined) {
 					attrs[xx] =defaults[xx];
 				}
 			}
 			//convert to int
-			var attrsToInt =['pageSize', 'loadMorePageSize', 'scrollLoad', 'minSearchLength', 'minSearchShowAll'];
+			var attrsToInt =['pageSize', 'loadMorePageSize', 'scrollLoad', 'scrollBuffer', 'minSearchLength', 'minSearchShowAll'];
 			for(var ii=0; ii<attrsToInt.length; ii++) {
 				attrs[attrsToInt[ii]] =parseInt(attrs[attrsToInt[ii]], 10);
 			}
@@ -379,7 +380,7 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						$timeout.cancel(timeoutInfo.scrolling.trig);
 						timeoutInfo.scrolling.trig =$timeout(function() {
 							//console.log('jrgLookup timeout scrolling loading');
-							var buffer =25;
+							var buffer =$attrs.scrollBuffer;
 							var scrollPos, scrollHeight, viewportHeight;
 							if(0) {		//old - jquery
 							scrollPos =$(window).scrollTop();
@@ -412,7 +413,7 @@ angular.module('jackrabbitsgroup.angular-lookup', []).directive('jrgLookup', ['$
 						$timeout.cancel(timeoutInfo.search.trig);
 						timeoutInfo.scrolling.trig =$timeout(function() {
 							//console.log('jrgLookup timeout scrolling loading');
-							var buffer =25;
+							var buffer =$attrs.scrollBuffer;
 							var ele =document.getElementById($attrs.ids.scrollContent);
 							var scrollPos =ele.scrollTop;
 							var scrollHeight =ele.scrollHeight;

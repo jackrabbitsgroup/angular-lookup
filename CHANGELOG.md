@@ -1,5 +1,9 @@
 Version numbers correspond to `bower.json` version
 
+# 1.0.6 (2014-10-14)
+- add `scroll-buffer` attribute option for when to trigger loading more
+
+
 # 1.0.5 (2014-04-23)
 ## Features
 - add `jrgLookupReInit` event to call to re init directive
