@@ -1,5 +1,5 @@
 <div ng-controller='PageScrollCtrl'>	
-	<div jrg-lookup items-raw='usersRaw' items-filtered='users' filter-fields='filterFields' load-more='loadMore' opts='opts' scroll-load='1' page-scroll='1'>
+	<div jrg-lookup items-raw='usersRaw' items-filtered='users' filter-fields='filterFields' load-more='loadMore' opts='opts' scroll-load='1' page-scroll='1' scroll-buffer='200'>
 		<!-- custom display code to ng-repeat and display the results (items-filtered) goes below -->
 		<div class='friends-user' ng-repeat='user in users'>
 			{{user.name}}
